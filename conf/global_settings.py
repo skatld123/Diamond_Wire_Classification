@@ -1,7 +1,6 @@
 """ configurations for this project
 author baiyu
 """
-import os
 from datetime import datetime
 
 #directory to save weights file
