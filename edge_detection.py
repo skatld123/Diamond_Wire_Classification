@@ -27,13 +27,14 @@ def edgeDetection(directory):
         # cv2.imwrite(join(directory, 'edge_detection_xy', name) , scharrxy)
         
         # Canny 필터 적용
-        cannyxy = cv2.Canny(img, 50, 200)
-        cv2.imwrite(join(directory, 'edge_detection_Canny', name) , cannyxy)
+        # 두 번째 인자가 일정 임계값 보다 낮으면 엣지로 추출 x, 세 번째 인자는 일정 임계값보다 높으면 무조건 엣지로 추출
+        cannyxy = cv2.Canny(img, 50, 115)
+        cv2.imwrite(join(directory, 'edge_detection_Canny2', name) , cannyxy)
 
 path = 'dataset/whole'
 
 # make_dirs(path, 'edge_detection_x')
 # make_dirs(path, 'edge_detection_y')
-make_dirs(path, 'edge_detection_Canny')
+make_dirs(path, 'edge_detection_Canny2')
 
 edgeDetection(path)
