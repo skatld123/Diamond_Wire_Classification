@@ -13,7 +13,7 @@ import time
 import argparse
 
 import torch
-from torch.utils.data import DataLoader
+from torch.utils.data import DataLoader, ConcatDataset
 
 from conf import settings
 
@@ -28,11 +28,23 @@ if __name__ == '__main__':
     net = CNN()
     net = net.cuda()
 
-    path = os.path.join('dataset', 'edge_canny_train_test_val', 'test')
+    dataset_path = [
+        # 'original_train_test_val',
+        'edge_canny_train_test_val',
+        'edge_Laplacian_train_test_val',
+        'edge_ScharrXY_train_test_val',
+        'edge_SobelXY_train_test_val'
+    ]
+    test_datasets = []
 
-    data_list = make_data_list(path)
-    dataset = WireDataset(data_list, input_transform=input_transform())
-    dataloader = DataLoader(dataset, batch_size=args.b, shuffle=True, num_workers=args.num_workers)
+    for path in dataset_path:
+        test_path = os.path.join('dataset', path, 'test')
+        test_data_list = make_data_list(test_path)
+        test_dataset = WireDataset(test_data_list, input_transform=input_transform())
+        test_datasets.append(test_dataset)
+
+    concat_test_dataset = ConcatDataset(test_datasets)
+    dataloader = DataLoader(concat_test_dataset, batch_size=args.b, shuffle=True, num_workers=args.num_workers)
 
     net.load_state_dict(torch.load(args.weights))
     print(net)

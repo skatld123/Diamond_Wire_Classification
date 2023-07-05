@@ -6,7 +6,9 @@ from torchvision import transforms
 
 def input_transform():
     return transforms.Compose([
-        transforms.ToTensor()
+        transforms.ToTensor(),
+        # 추가
+        transforms.Normalize((0.5,), (0.5,))
     ])
 
 def make_data_list(root):
@@ -37,8 +39,8 @@ class WireDataset(Dataset):
         if self.input_transform:
             img_transform = self.input_transform(img)
 
-        label = image_path.split('_')[0]
-        label = label.split('/')[-1]
+        label = image_path.split('/')[-1]
+        label = label.split('_')[0]
         if label == 'high':
             label = 0
         elif label == 'medium':
